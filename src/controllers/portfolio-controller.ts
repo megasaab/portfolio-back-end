@@ -65,4 +65,15 @@ portfolioRouter.get('/get-project-by-id/:id', async (request, response) => {
   }
 });
 
+portfolioRouter.post('/edit-portfolio', async (request, response) => {
+  try {
+    const { id, portfolio } = request.body;
+    console.log(id)
+    const result = await PORTFOLIO.findOneAndUpdate({ _id: id }, portfolio, { returnOriginal: false });
+    return response.status(StatusCodes.OK).json({ success: true, result });
+  } catch (error) {
+    return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, error: error?.toString() })
+  }
+})
+
 export default portfolioRouter;
