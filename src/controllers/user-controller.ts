@@ -37,11 +37,10 @@ usersRouter.post('/remove-by-id', authMiddleware, async (request, response) => {
 
 
 usersRouter.post('/add-portfolio',authMiddleware, async (request: any, response) => {
-  const {title, position,  aboutMe, skills} = request.body;
+  const {title, position,  aboutMe, skills,  socialNetworks} = request.body;
   try {
   
     const user = await USER.findById({_id: request.decoded.user_id});
-    console.log(user)
 
     if (user.portfolioId) {
       return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, error: 'user can have only one potfolio' })
@@ -52,6 +51,7 @@ usersRouter.post('/add-portfolio',authMiddleware, async (request: any, response)
       position,
       aboutMe,
       skills,
+      socialNetworks
     });
 
     await USER.findOneAndUpdate({_id: user._id}, { portfolioId: portfolio._id });
