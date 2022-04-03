@@ -8,7 +8,7 @@ const projectSchema = new mongoose.Schema({
     language: { type: String, default: null },
     about: { type: String, default: null },
     link: { type: String, default: null },
-    githabLink: { type: String, default: null },
+    githubLink: { type: String, default: null },
     description: {type: String, default: null},
 });
 

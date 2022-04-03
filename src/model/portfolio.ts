@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     socialNetworks: {type: [Object], default: null },
     projectList: {type: [Object], default: null },
     workExpirience: {type: [Object], default: null },
-    avatartUrl:  { type: String, default: null},
+    avatarUrl:  { type: String, default: null},
   });
   
 export const PORTFOLIO = mongoose.model("portfolio", userSchema)

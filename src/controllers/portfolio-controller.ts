@@ -68,12 +68,39 @@ portfolioRouter.get('/get-project-by-id/:id', async (request, response) => {
 portfolioRouter.post('/edit-portfolio', async (request, response) => {
   try {
     const { id, portfolio } = request.body;
-    console.log(id)
+
     const result = await PORTFOLIO.findOneAndUpdate({ _id: id }, portfolio, { returnOriginal: false });
     return response.status(StatusCodes.OK).json({ success: true, result });
   } catch (error) {
     return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, error: error?.toString() })
   }
-})
+});
+
+portfolioRouter.post('/edit-project', async (request, response) => {
+  try {
+    const { id, project } = request.body;
+
+    const result = await PROJECT.findOneAndUpdate({ _id: id }, project, { returnOriginal: false });
+    return response.status(StatusCodes.OK).json({ success: true, result });
+  } catch (error) {
+    return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, error: error?.toString() })
+  }
+});
+
+portfolioRouter.post('/delete-project', authMiddleware, async (request: any, response) => {
+  try {
+    const { id } = request.body;
+
+    const user = await USER.findOneAndUpdate({ _id: request.decoded.user_id });
+
+    await PORTFOLIO.findOneAndUpdate({ _id: user.portfolioId }, { $pull: { projectList: id } });
+
+    const result = await PROJECT.deleteOne({ _id: id });
+
+    return response.status(StatusCodes.OK).json({ success: true, result });
+  } catch (error) {
+    return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, error: error?.toString() })
+  }
+});
 
 export default portfolioRouter;
