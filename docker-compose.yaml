@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+ portfolio_api:
+  build: ./
+  command: npm run start
+  restart: unless-stopped
+  environment:
+    - MONGO_USER=root
+    - MONGO_PASS=root
+    - LISTEN_PORT=5200
+    - MONGO_INITDB_ROOT_PASSWORD=root
+    - MONGODB_URL=mongodb://mongoDataBasePortfolio:27017/portfolio
+  ports:
+    - 5200:5200
+  depends_on:
+    - mongoDataBasePortfolio
+  networks: 
+    - megasaab-docker-network-portfolio
+    # - https
+ 
+ mongoDataBasePortfolio:
+  image: 'mongo'
+  ports:
+    - 27016:27017
+  environment:
+    - MONGO_INITDB_ROOT_USERNAME=root
+    - MONGO_INITDB_ROOT_PASSWORD=root
+
+  volumes:
+    - mongodb_api_portfolio:/data/db_portfolio
+  networks: 
+    - megasaab-docker-network-portfolio
+
+volumes:
+ mongodb_api_portfolio:
+
+networks: 
+  # https:
+  #   external:
+  #     name: https_network
+  megasaab-docker-network-portfolio:
+    driver: bridge
